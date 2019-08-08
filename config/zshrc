@@ -102,11 +102,17 @@ if [[ $TERM != dumb ]]; then
 
         eval "$(dircolors -b ~/.dircolors)"
 
-    # Fallback to default BSD names
+    # Fallback to default BSD names for GNU ls
     elif [[ -x =gdircolors && -x =gls ]]; then
         eval "$(gdircolors -b ~/.dircolors)"
         ls_bin="gls"
         [[ ! -x =ggrep ]] || grep_bin="ggrep"
+    fi
+
+    # dircolors and gdircolors doesn't work.
+    # Test if ls support -G switch this means that we are running on a BSD system with support for colors
+    elif $ls_bin -G >/dev/null 2>&1; then
+        LS_COLORS="ExGxFxdaCxDaDahbadacec"
     fi
 
     # Test if ls supports --color=auto
